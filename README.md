@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/KlausC/PkgVersion.jl.svg?branch=master)](https://travis-ci.org/KlausC/PkgVersion.jl)
 [![Codecov](https://codecov.io/gh/KlausC/PkgVersion.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/KlausC/PkgVersion.jl)
 
-####Provide macros to access fields `version`, `uuid`, `authors` in `Project.toml
+#### Provide macros to access fields `version`, `uuid`, `authors` in `Project.toml
 at compile time.
 
 ### Usage
@@ -20,7 +20,8 @@ const author = @PkgVersion.Author "unknown@nowhere"
 end
 ```
 
-##### Note
+##### Notes
 File `@__DIR__/../Project.toml` must exist readable.
-`Author` returns the first string in field `authors`.
+
+`Author` returns the first string of field `authors`.
 
