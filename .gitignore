@@ -1,0 +1,6 @@
+.DS_Store
+/dev/
+/tmp/
+/Manifest.toml
+/test/data
+*.cov
