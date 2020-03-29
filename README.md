@@ -10,18 +10,21 @@ at compile time.
 
 ```julia
 module MyModule
-
+using Tar
 using PkgVersion
 
-const version = @PkgVersion.Version 0
-const uuid = @PkgVersion.Uuid 
-const author = @PkgVersion.Author "unknown@nowhere"
+const VERSION = @PkgVersion.Version 0
+const UUID = @PkgVersion.Uuid 
+const AUTHOR = @PkgVersion.Author "unknown@nowhere"
+
+
+const TarVersion = PkgVersion.Version(Tar)  
 
 end
 ```
 
 ##### Notes
-File `@__DIR__/../Project.toml` must exist readable.
+File `Project.toml` must exist readable.
 
 `Author` returns the first string of field `authors`.
 

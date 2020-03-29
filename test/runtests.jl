@@ -1,13 +1,20 @@
 using Test
 using PkgVersion
+using Pkg
 
-const version = @PkgVersion.Version "0"
-const uuid = @PkgVersion.Uuid 0
-const author = @PkgVersion.Author ""
+const VERSION = @PkgVersion.Version
+const UUID = @PkgVersion.Uuid
+const AUTHOR = @PkgVersion.Author
 
-@testset "version - uuid - author" begin
-    @test version isa VersionNumber
-    @test uuid isa Base.UUID
-    @test author isa String
+@testset "macro own package Version - Uuid - Author" begin
+    @test VERSION isa VersionNumber
+    @test UUID isa Base.UUID
+    @test AUTHOR isa String
+end
+
+@testset "function other package Version - Uuid - Author" begin
+    @test PkgVersion.Version(Pkg) isa VersionNumber
+    @test PkgVersion.Uuid(Test) isa Base.UUID
+    @test PkgVersion.Author(Pkg) isa String
 end
 

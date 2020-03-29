@@ -1,10 +1,10 @@
 name = "PkgVersion"
 uuid = "eebad327-c553-4316-9ea0-9fa01ccd7688"
 authors = ["Klaus Crusius <klaus.crusius@web.de>"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
 [compat]
 julia = "1"
