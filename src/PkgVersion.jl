@@ -1,6 +1,10 @@
 module PkgVersion
 using Pkg
 
+if Base.VERSION < v"1.4"
+    pkgdir(m::Module) = abspath(Base.pathof(m), "..", "..")
+end
+
 function project_data(m::Module, name, T, default)
     sname = Symbol(name)
     if isconst(m, sname)
