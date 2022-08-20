@@ -4,8 +4,13 @@ using Pkg
 if Base.VERSION < v"1.4"
     function pkgdir(m::Module)
         pf = Base.pathof(m)
-        pf = pf === nothing ? "." : pf
-        abspath(pf, "..", "..")
+        while pf === nothing
+            p = m
+            m = parentmodule(m)
+            m === p && break
+            pf = Base.pathof(m)
+        end
+        pf === nothing ? nothing : abspath(pf, "..", "..")
     end
 end
 
