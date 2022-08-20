@@ -2,7 +2,11 @@ module PkgVersion
 using Pkg
 
 if Base.VERSION < v"1.4"
-    pkgdir(m::Module) = abspath(Base.pathof(m), "..", "..")
+    function pkgdir(m::Module)
+        pf = Base.pathof(m)
+        pf = pf === nothing ? "." : pf
+        abspath(pf, "..", "..")
+    end
 end
 
 function project_data(m::Module, name, T, default)
