@@ -4,3 +4,4 @@
 /Manifest.toml
 /test/data
 *.cov
+lcov.info
