@@ -16,14 +16,10 @@ end
 
 function project_data(m::Module, name, T, default)
     sname = Symbol(name)
-    if isconst(m, sname)
-        T(getfield(m, sname))
-    else
-        pf = pkgdir(m)
-        pf === nothing && return T(default)
-        pf = Pkg.Types.projectfile_path(pf)
-        project_data(pf, name, T, default)
-    end
+    pf = pkgdir(m)
+    pf === nothing && return T(default)
+    pf = Pkg.Types.projectfile_path(pf)
+    project_data(pf, name, T, default)
 end
 function project_data(pf::AbstractString, name, T::Union{Type,Function}, default)
     pf === nothing && return T(default)

@@ -16,4 +16,6 @@ end
     @test PkgVersion.Version(Pkg) isa VersionNumber
     @test PkgVersion.Uuid(Test) isa Base.UUID
     @test PkgVersion.Author(Pkg) isa String
+    @test PkgVersion.Version(Pkg) == PkgVersion.Version(Pkg.Types)
+    @test PkgVersion.Uuid(Core.Compiler, 99) == Base.UUID(99)
 end
