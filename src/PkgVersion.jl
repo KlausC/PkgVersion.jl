@@ -3,12 +3,7 @@ using Pkg
 
 function _pkgdir(m::Module)
     if Base.VERSION < v"1.4"
-        pf = Base.pathof(m)
-        while pf === nothing
-            p, m = m, parentmodule(m)
-            m === p && break
-            pf = Base.pathof(m)
-        end
+        pf = Base.pathof(Base.moduleroot(m))
         pf === nothing ? nothing : abspath(pf, "..", "..")
     else
         pkgdir(m)
@@ -16,7 +11,6 @@ function _pkgdir(m::Module)
 end
 
 function project_data(m::Module, name, T, default)
-    sname = Symbol(name)
     pf = _pkgdir(m)
     pf === nothing && return T(default)
     pf = Pkg.Types.projectfile_path(pf)
