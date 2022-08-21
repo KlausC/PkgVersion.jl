@@ -1,16 +1,15 @@
 module PkgVersion
 using Pkg
 
-function _pkgdir(m::Module)
-    if Base.VERSION < v"1.4"
-        pf = Base.pathof(Base.moduleroot(m))
-        pf === nothing ? nothing : abspath(pf, "..", "..")
-    else
-        pkgdir(m)
-    end
-end
-
 function project_data(m::Module, name, T, default)
+    function _pkgdir(m::Module)
+        if Base.VERSION < v"1.4"
+            pf = Base.pathof(Base.moduleroot(m))
+            pf === nothing ? nothing : abspath(pf, "..", "..")
+        else
+            pkgdir(m)
+        end
+    end
     pf = _pkgdir(m)
     pf === nothing && return T(default)
     pf = Pkg.Types.projectfile_path(pf)
