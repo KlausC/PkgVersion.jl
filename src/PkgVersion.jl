@@ -22,7 +22,8 @@ function project_data(pf::AbstractString, name, T::Union{Type,Function}, default
         res = getfield(pr, Symbol(name))
         res === nothing ? T(default) : res
     else
-        res = get(() -> T(default), pr.other, string(name))
+        d = pr isa Dict ? pr : pr.other
+        res = get(() -> T(default), d, string(name))
         res isa AbstractVector ? res[1] : res
     end
 end
