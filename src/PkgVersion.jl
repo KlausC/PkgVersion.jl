@@ -3,7 +3,7 @@ using Pkg
 
 function project_data(m::Module, name, T, default)
     function _pkgdir(m::Module)
-        if Base.VERSION < v"1.4"
+        @static if Base.VERSION < v"1.4"
             pf = Base.pathof(Base.moduleroot(m))
             pf === nothing ? nothing : abspath(pf, "..", "..")
         else
@@ -18,13 +18,31 @@ end
 function project_data(pf::AbstractString, name, T::Union{Type,Function}, default)
     pf === nothing && return T(default)
     pr = Pkg.Operations.read_project(pf)
-    if Symbol(name) ∈ fieldnames(typeof(pr))
-        res = getfield(pr, Symbol(name))
-        res === nothing ? T(default) : res
+    @static if Base.VERSION < v"1.1"
+        @assert pr isa Dict
+        sname = string(name)
+        if sname ∈ keys(pr)
+            res = get(pr, sname, nothing)
+            if res !== nothing
+                if sname == "version"
+                    res = VersionNumber(res)
+                elseif sname == "uuid"
+                    res = Base.UUID(res)
+                end
+            end
+            res === nothing ? T(default) : res
+        else
+            res = get(() -> T(default), pr, sname)
+            res isa AbstractVector ? res[1] : res
+        end
     else
-        d = pr isa Dict ? pr : pr.other
-        res = get(() -> T(default), d, string(name))
-        res isa AbstractVector ? res[1] : res
+        if Symbol(name) ∈ fieldnames(typeof(pr))
+            res = getfield(pr, Symbol(name))
+            res === nothing ? T(default) : res
+        else
+            res = get(() -> T(default), pr.other, string(name))
+            res isa AbstractVector ? res[1] : res
+        end
     end
 end
 macro Version(default=0)
