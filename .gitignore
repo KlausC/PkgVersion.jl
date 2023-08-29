@@ -5,3 +5,4 @@
 /test/data
 *.cov
 lcov.info
+settings.json
