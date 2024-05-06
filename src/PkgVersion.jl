@@ -1,5 +1,13 @@
 module PkgVersion
-using Pkg
+
+# Copied from Pkg/src/Types.jl:186
+function projectfile_path(env_path::String; strict=false)
+    for name in Base.project_names
+        maybe_file = joinpath(env_path, name)
+        isfile(maybe_file) && return maybe_file
+    end
+    return strict ? nothing : joinpath(env_path, "Project.toml")
+end
 
 function project_data(m::Module, name, T, default)
     function _pkgdir(m::Module)
@@ -12,7 +20,7 @@ function project_data(m::Module, name, T, default)
     end
     pf = _pkgdir(m)
     pf === nothing && return T(default)
-    pf = Pkg.Types.projectfile_path(pf)
+    pf = projectfile_path(pf)
     project_data(pf, name, T, default)
 end
 

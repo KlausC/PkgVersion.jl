@@ -1,10 +1,7 @@
 name = "PkgVersion"
 uuid = "eebad327-c553-4316-9ea0-9fa01ccd7688"
 authors = ["KlausC <klausC@users.noreply.github.com> and contributors"]
-version = "0.3.3"
-
-[deps]
-Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+version = "0.4.0"
 
 [compat]
 julia = "1"
