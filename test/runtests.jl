@@ -18,4 +18,5 @@ end
     @test PkgVersion.Author(Pkg) isa String
     @test PkgVersion.Version(Pkg) == PkgVersion.Version(Pkg.Types)
     @test PkgVersion.Uuid(Core.Compiler, 99) == Base.UUID(99)
+    @test PkgVersion.project_variable(Dict{String,Any}(), :version, VersionNumber, 7) == v"7"
 end

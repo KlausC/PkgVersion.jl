@@ -1,5 +1,5 @@
 module PkgVersion
-using Pkg
+import TOML
 
 function project_data(m::Module, name, T, default)
     function _pkgdir(m::Module)
@@ -12,29 +12,24 @@ function project_data(m::Module, name, T, default)
     end
     pf = _pkgdir(m)
     pf === nothing && return T(default)
-    pf = Pkg.Types.projectfile_path(pf)
+    pf = Base.env_project_file(pf)
+    pf isa String || return T(default)
     project_data(pf, name, T, default)
 end
 
 function project_variable(pr::Dict, name, T, default)
-    res = get(() -> T(default), pr, string(name))
+    res = get(pr, string(name), default)
     res = res isa AbstractVector ? res[1] : res
-    T isa Type ? T(res) : res
-end
-function project_variable(pr, name, T, default)
-    sname = Symbol(name)
-    res = isdefined(pr, sname) ? getfield(pr, sname) : nothing
-    res === nothing ? project_variable(pr.other, name, T, default) : res
+    T(res)
 end
 
 function project_data(pf::AbstractString, name, T::Union{Type,Function}, default)
-    pf === nothing && return T(default)
-    pr = Pkg.Operations.read_project(pf)
+    pr = TOML.parsefile(pf)
     project_variable(pr, name, T, default)
 end
 
 macro Version(default=0)
-    project_data(__module__, :version, VersionNumber, default)
+    Version(__module__, default)
 end
 macro Uuid(default=0)
     project_data(__module__, :uuid, Base.UUID, default)
@@ -43,7 +38,11 @@ macro Author(default="unknown")
     project_data(__module__, "authors", string, default)
 end
 
-Version(m::Module, default=0) = project_data(m, :version, VersionNumber, default)
+@static if isdefined(Base, :pkgversion) # Julia v1.9+
+    Version(m::Module, default=0) = something(pkgversion(m), VersionNumber(default))
+else
+    Version(m::Module, default=0) = project_data(m, :version, VersionNumber, default)
+end
 Uuid(m::Module, default=0) = project_data(m, :uuid, Base.UUID, default)
 Author(m::Module, default="unknown") = project_data(m, "authors", string, default)
 
