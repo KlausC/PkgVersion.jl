@@ -1,16 +1,18 @@
 name = "PkgVersion"
 uuid = "eebad327-c553-4316-9ea0-9fa01ccd7688"
 authors = ["KlausC <klausC@users.noreply.github.com> and contributors"]
-version = "0.3.3"
+version = "0.3.4"
 
 [deps]
-Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 
 [compat]
+TOML = "1"
 julia = "1"
 
 [extras]
+Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test"]
+test = ["Pkg", "Test"]
